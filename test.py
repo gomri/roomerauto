@@ -1,35 +1,35 @@
-# coding=utf-8
-import mysql.connector
-import re
-import requests
-import json
-from timeit import default_timer as timer
-from time import sleep
+# # coding=utf-8
+# import mysql.connector
+# import re
+# import requests
+# import json
+# from timeit import default_timer as timer
+# from time import sleep
 
-url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
+# url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
 
-header = {
-    "Authorization": "Token token=cd7de248487ac667fe3a6f60235ed1d0",
-    "Partner": "eric@kayak.com",
-    "API-Version": "1"
-}
+# header = {
+#     "Authorization": "Token token=cd7de248487ac667fe3a6f60235ed1d0",
+#     "Partner": "eric@kayak.com",
+#     "API-Version": "1"
+# }
 
-start = timer()
-
-
-def x():
-    r = requests.get(url, None, headers=header)
-    content = r.content
-    x = json.loads(content)
-    print type(x[0].get("reservation"))
-    print x[0].get("reservation").get("private")
-    sleep(1)
+# start = timer()
 
 
-x()
+# def x():
+#     r = requests.get(url, None, headers=header)
+#     content = r.content
+#     x = json.loads(content)
+#     print type(x[0].get("reservation"))
+#     print x[0].get("reservation").get("private")
+#     sleep(1)
 
-end = timer()
-print end - start
+
+# x()
+
+# end = timer()
+# print end - start
 
 
 
@@ -71,19 +71,19 @@ print end - start
 # x = re.search(reservation_extraction_regex, entry_url).group(2)
 # y = int(x)
 # print y
+from time import sleep
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
+driver = webdriver.Firefox()
+sleep(5)
+driver.get('http://roomer-qa-2.herokuapp.com/hotels/cannes-hotels/intercontinental-carlton-cannes.h2339/44560981?rate_plan_id=2&rate_plan_token=2bb5e9a092c79f3cffa0171cc53dbd6a')
 
-# from selenium import webdriver
-# from selenium.common.exceptions import NoSuchElementException
-# from selenium.webdriver.common.keys import Keys
-# driver = webdriver.Firefox()
-#
-# driver.get('http://roomer-qa-2.herokuapp.com/hotels/cannes-hotels/le-grand-hotel.h12375/44524748/book?rate_plan_id=2&rate_plan_token=457a6ed2372c5b1863648761a3cf3ef2&&life_happens_included=true')
-#
-# '''
-# Click on life-happens in review
-# '''
-#
-#
+'''
+Click on life-happens in review
+'''
+book_first_room_on_list = driver.find_element_by_xpath(u'//.book-btn[contains(text(), "Book")]').click()
+
 # '''
 # Tries to choose life happens on review if it cant
 # Moves to filling the rest of the fields
