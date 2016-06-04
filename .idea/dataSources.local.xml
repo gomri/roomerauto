@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - roomer@qa-db.chwkxuugo66h.us-east-1.rds.amazonaws.com" uuid="271e2156-b201-4fc5-a3c6-1d00564b5186">
+      <secret-storage>master_key</secret-storage>
+      <user-name>admin</user-name>
+    </data-source>
+  </component>
+</project>

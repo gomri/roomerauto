@@ -25,8 +25,9 @@ def get_transaction_ID(url, regex):
 
 
 driver = webdriver.Firefox()
+driver.implicitly_wait(20)
 
-enter_home_page = driver.get('http://roomer-qa-2.herokuapp.com')
+enter_home_page = driver.get('http://roomer-qa-1.herokuapp.com')
 click_Find_Rooms = driver.find_element_by_css_selector('div.find_rooms.blue-btn').click()
 '''
 Solves the problem of the code crashing if the list hes not loaded yet
@@ -36,12 +37,8 @@ while True:
     try:
         insert_email_for_secret_deals = driver.find_element_by_name('user[email]').send_keys('afd@afd.com')
         click_unlock_secret_deals = driver.find_element_by_name('button').click()
-        time.sleep(5)
         break
     except ElementNotVisibleException:
-        time.sleep(10)
-        print "Could not find element because page is still loading will try again in 10 seconds"
-time.sleep(10)
 '''
 Deals with the new and the old list
 By telling the code that if it gets an exception that there is no such element
@@ -55,11 +52,13 @@ except NoSuchElementException:
         '.component-post.button').click()
 move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
 driver.get(driver.current_url)
-select_non_life_happens_entry = driver.find_element_by_css_selector(
-    '.entry_box_icon.entry_box_radio.entry_box_col.entry_box_col1').click()
-time.sleep(5)
-click_book_entry = driver.find_element_by_css_selector('.book_now_btn_redirect').click()
-driver.get(driver.current_url)
+try:
+    entry_with_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")
+    select_non_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
+    entry_with_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
+except NoSuchElementException:    
+    entry_without_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.no_refund")
+    entry_without_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
 print get_reservation_ID(driver.current_url, regex_reservation_id)
 
 '''
@@ -68,12 +67,12 @@ New review
 Tries to choose life happens on review if it cant
 Moves to filling the rest of the fields
 '''
-try:
-    click_life_happens_review_step1 = \
-        driver.find_elements_by_css_selector('.font-regular.weight-bold.font-highlighted-special')[0].click()
-    click_continue_review_step1 = driver.find_element_by_link_text("Continue").click()
-except IndexError:
-    pass
+# try:
+review_with_LH = driver.find_element_by_css_selector(".lh-select.collapsable.font-regular.bottom-separator")
+review_with_LH.find_element_by_xpath(u"//span[contains(text(), '(Recommended)')]").click()
+review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
+# except NoSuchElementException:
+  # pass
 insert_review_full_name = driver.find_element_by_id("review-full-name").send_keys("omri golan")
 insert_review_mobile_number = driver.find_element_by_id("mobile-number").send_keys("7547541452")
 insert_review_email = driver.find_element_by_id("review-email").send_keys("bob.g@goroomer.com")

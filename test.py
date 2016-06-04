@@ -6,47 +6,32 @@ import json
 from timeit import default_timer as timer
 from time import sleep
 
-url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
 
-header = {
-    "Authorization": "Token token=cd7de248487ac667fe3a6f60235ed1d0",
-    "Partner": "eric@kayak.com",
-    "API-Version": "1"
-}
-
-start = timer()
-
-
-def x():
-    r = requests.get(url, None, headers=header)
-    content = r.content
-    x = json.loads(content)
-    print type(x[0].get("reservation"))
-    print x[0].get("reservation").get("private")
-    sleep(1)
-
-
-x()
-
-end = timer()
-print end - start
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
+#
+# header = {
+#     "Authorization": "Token token=b673ed8608a1e684d0b957e326f3dffc",
+#     "Partner": "eric@kayak.com",
+#     "API-Version": "1"
+# }
+#
+# start = timer()
+#
+#
+#
+# r = requests.get(url, None, headers=header)
+# content = r.content
+# x = json.loads(content)
+# print type(x[0]["reservation"])
+# print x[0]["reservation"]
+# sleep(1)
+#
+#
+#
+# end = timer()
+# print end - start
+#
+# a = []
 
 # conn = mysql.connector.connect(user='admin', password='Roomerhasit1',
 #                                port='14642',
@@ -72,24 +57,31 @@ print end - start
 # y = int(x)
 # print y
 
-# from selenium import webdriver
-# from selenium.common.exceptions import NoSuchElementException
-# from selenium.webdriver.common.keys import Keys
-# driver = webdriver.Firefox()
-#
-# driver.get('http://roomer-qa-2.herokuapp.com/hotels/cannes-hotels/le-grand-hotel.h12375/44524748/book?rate_plan_id=2&rate_plan_token=457a6ed2372c5b1863648761a3cf3ef2&&life_happens_included=true')
-#
-# '''
-# Click on life-happens in review
-# '''
-#
-#
-# '''
-# Tries to choose life happens on review if it cant
-# Moves to filling the rest of the fields
-# '''
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
+from time import sleep
+driver = webdriver.Firefox()
+driver.implicitly_wait(5)
+
+driver.get('http://roomer-qa-2.herokuapp.com/hotels/bali-hotels/hanging-gardens-of-bali.h476098/44381586?rate_plan_id=2&rate_plan_token=157c6f410cd7712827ed39b8af69068c&')
+
+'''
+Click on life-happens in review
+'''
+
+'''
+Tries to choose life happens on review if it cant
+Moves to filling the rest of the fields
+'''
+x = driver.find_elements_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")[0]
+x.find_elements_by_css_selector(".entry_box_title.entry_box_col.entry_box_col2")[0].click()
+x.find_elements_by_css_selector(".book-wrapper.book-btn.book_now_btn.book_now_btn_redirect")[0].click()
+sleep(5)
+driver.save_screenshot('screenie.png')
+
 # try:
-#     driver.find_elements_by_css_selector('.font-regular.weight-bold.font-highlighted-special')[0].click()
+#     driver.find_elements_by_css_selector(".lh-row.push-bottom ")[1].click()
 #     driver.find_element_by_link_text("Continue").click()
 # except IndexError:
 #     pass
@@ -105,5 +97,5 @@ print end - start
 # insert_billing_address_click_box = driver.find_element_by_id('billing-address-input').click()
 # insert_billing_address_arrow_down = driver.find_element_by_id('billing-address-input').send_keys(Keys.ARROW_DOWN)
 # insert_street_address_click_enter = driver.find_element_by_id('billing-address-input').send_keys(Keys.ENTER)
-#
+
 # driver.find_element_by_id('checkout-button').click()
