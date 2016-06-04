@@ -28,11 +28,7 @@ def get_transaction_ID(url, regex):
 driver = webdriver.Firefox()
 driver.implicitly_wait(20)
 
-<<<<<<< HEAD
 enter_home_page = driver.get('http://roomer-qa-1.herokuapp.com')
-=======
-enter_home_page = driver.get('https://www.roomertravel.com')
->>>>>>> origin/master
 click_Find_Rooms = driver.find_element_by_css_selector('div.find_rooms.blue-btn').click()
 '''
 Solves the problem of the code crashing if the list hes not loaded yet
@@ -44,34 +40,21 @@ while True:
         click_unlock_secret_deals = driver.find_element_by_name('button').click()
         break
     except ElementNotVisibleException:
-'''
-Deals with the new and the old list
-By telling the code that if it gets an exception that there is no such element
-Because it's looking for the button of the wrong list it tries the the other lists button
-'''
-try:
-    book_first_room_on_list = driver.find_element_by_css_selector(
-        '.book-button-row.blue-btn.book-button-row-link').click()
-except NoSuchElementException:
-    book_first_room_on_list = driver.find_element_by_css_selector(
-        "css=.book-wrapper.book-btn.book_now_btn.book_now_btn_redirect:contains('Book')").click()
+        pass
+
+list_page = driver.find_element_by_css_selector('.list-right')
+click_first_room_from_list = list_page.find_element_by_xpath(u"//button[contains(text(), 'View Deal')]").c1lick()
+
 move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
 driver.get(driver.current_url)
-<<<<<<< HEAD
 try:
     entry_with_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")
-    select_non_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
+    select_non_refund_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
     entry_with_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
 except NoSuchElementException:    
     entry_without_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.no_refund")
     entry_without_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
-=======
-select_non_life_happens_entry = driver.find_element_by_css_selector(
-    '.entry_box_icon.entry_box_radio.entry_box_col.entry_box_col1').click()
-time.sleep(5)
 click_book_entry = driver.find_element_by_css_selector('.book_now_btn_redirect').click()
-river.get(driver.current_url)
->>>>>>> origin/master
 print get_reservation_ID(driver.current_url, regex_reservation_id)
 
 '''
@@ -102,6 +85,17 @@ insert_billing_address_click_enter = driver.find_element_by_id('billing-address-
 click_book_button_review = driver.find_element_by_id('checkout-button').click()
 time.sleep(10)
 print get_transaction_ID(driver.current_url, regex_transaction_id)
+
+'''
+Check that your on thank you page
+'''
+try:
+    thank_you_page = driver.find_element_by_css_selector('.thank_you_title')
+    print "Successfully Purchased room"
+except NoSuchElementException:
+    driver.save_screenshot('error_buying_room.png')
+    print "Could not Purchase room please look at script diractory for a screenshot of failer"
+driver.close()
 
 '''
 Old review
