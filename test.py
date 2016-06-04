@@ -6,8 +6,6 @@
 # from timeit import default_timer as timer
 # from time import sleep
 
-<<<<<<< HEAD
-=======
 # url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
 
 # header = {
@@ -48,7 +46,6 @@
 
 
 
->>>>>>> origin/master
 
 # url = "http://roomer-api-qa-2.herokuapp.com/api/reservations_by_hotels/690/2016-06-18/2016-06-28"
 #
@@ -99,49 +96,34 @@
 # x = re.search(reservation_extraction_regex, entry_url).group(2)
 # y = int(x)
 # print y
-from time import sleep
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
-driver = webdriver.Firefox()
-sleep(5)
-driver.get('http://roomer-qa-2.herokuapp.com/hotels/cannes-hotels/intercontinental-carlton-cannes.h2339/44560981?rate_plan_id=2&rate_plan_token=2bb5e9a092c79f3cffa0171cc53dbd6a')
 
-'''
-Click on life-happens in review
-'''
-book_first_room_on_list = driver.find_element_by_xpath(u'//.book-btn[contains(text(), "Book")]').click()
+# from selenium import webdriver
+# from selenium.common.exceptions import NoSuchElementException
+# from selenium.webdriver.common.keys import Keys
+# from time import sleep
+# driver = webdriver.Firefox()
+# driver.implicitly_wait(5)
 
-<<<<<<< HEAD
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
-from time import sleep
-driver = webdriver.Firefox()
-driver.implicitly_wait(5)
+# driver.get('http://roomer-qa-2.herokuapp.com/hotels/bali-hotels/hanging-gardens-of-bali.h476098/44381586?rate_plan_id=2&rate_plan_token=157c6f410cd7712827ed39b8af69068c&')
 
-driver.get('http://roomer-qa-2.herokuapp.com/hotels/bali-hotels/hanging-gardens-of-bali.h476098/44381586?rate_plan_id=2&rate_plan_token=157c6f410cd7712827ed39b8af69068c&')
+# '''
+# Click on life-happens in review
+# '''
 
-'''
-Click on life-happens in review
-'''
-
-'''
-Tries to choose life happens on review if it cant
-Moves to filling the rest of the fields
-'''
-x = driver.find_elements_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")[0]
-x.find_elements_by_css_selector(".entry_box_title.entry_box_col.entry_box_col2")[0].click()
-x.find_elements_by_css_selector(".book-wrapper.book-btn.book_now_btn.book_now_btn_redirect")[0].click()
-sleep(5)
-driver.save_screenshot('screenie.png')
-
-=======
 # '''
 # Tries to choose life happens on review if it cant
 # Moves to filling the rest of the fields
 # '''
->>>>>>> origin/master
+# x = driver.find_elements_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")[0]
+# x.find_elements_by_css_selector(".entry_box_title.entry_box_col.entry_box_col2")[0].click()
+# x.find_elements_by_css_selector(".book-wrapper.book-btn.book_now_btn.book_now_btn_redirect")[0].click()
+# sleep(5)
+# driver.save_screenshot('screenie.png')
+
+# '''
+# Tries to choose life happens on review if it cant
+# Moves to filling the rest of the fields
+# '''
 # try:
 #     driver.find_elements_by_css_selector(".lh-row.push-bottom ")[1].click()
 #     driver.find_element_by_link_text("Continue").click()
@@ -161,3 +143,8 @@ driver.save_screenshot('screenie.png')
 # insert_street_address_click_enter = driver.find_element_by_id('billing-address-input').send_keys(Keys.ENTER)
 
 # driver.find_element_by_id('checkout-button').click()
+
+import sys
+x = sys.argv[1]
+if x.upper() == 'Y':
+	print 'alex'

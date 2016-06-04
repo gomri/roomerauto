@@ -1,5 +1,6 @@
 import time
 import re
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
@@ -24,34 +25,32 @@ def get_transaction_ID(url, regex):
     int_transaction_id = int(string_transaction_id)
     return int_transaction_id
 
+redirect_url = sys.argv[1]
 
 driver = webdriver.Firefox()
 driver.implicitly_wait(20)
 
-enter_home_page = driver.get('http://roomer-qa-1.herokuapp.com')
-click_Find_Rooms = driver.find_element_by_css_selector('div.find_rooms.blue-btn').click()
-'''
-Solves the problem of the code crashing if the list hes not loaded yet
-By waiting for the list to load before it takes any action
-'''
-Secret_deal = raw_input("Would you like to open secret deal? Y/N: ")
-if Secret_deal.upper() == 'Y':
-    while True:
-        try:
-            insert_email_for_secret_deals = driver.find_element_by_name('user[email]').send_keys('afd@afd.com')
-            click_unlock_secret_deals = driver.find_element_by_name('button').click()
-            break
-        except ElementNotVisibleException:
-            pass
-else:
+enter_home_page = driver.get('http://roomer-qa-2.herokuapp.com'+redirect_url)
+try:
+    Secret_deal = raw_input("Would you like to open secret deal? Y/N: ")
+    if Secret_deal.upper() == 'Y':
+        while True:
+            try:
+                insert_email_for_secret_deals = driver.find_element_by_name('user[email]').send_keys('afd@afd.com')
+                click_unlock_secret_deals = driver.find_element_by_name('button').click()
+                break
+            except ElementNotVisibleException:
+                pass
+    else:
+        pass
+    list_page = driver.find_element_by_css_selector('.l-list-items.float-r.list-items')
+    first_room_list = list_page.find_elements_by_css_selector(".component-card-inner.component-inner")[0]
+    open_first_room_list = first_room_list.find_element_by_css_selector("button.component-post.button").click()
+
+    move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
+    driver.get(driver.current_url)
+except NoSuchElementException:
     pass
-
-list_page = driver.find_element_by_css_selector('.l-list-items.float-r.list-items')
-first_room_list = list_page.find_elements_by_css_selector(".component-card-inner.component-inner")[0]
-open_first_room_list = first_room_list.find_element_by_css_selector("button.component-post.button").click()
-
-move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
-driver.get(driver.current_url)
 try:
     entry_with_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")
     select_non_refund_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
@@ -68,12 +67,12 @@ New review
 Tries to choose life happens on review if it cant
 Moves to filling the rest of the fields
 '''
-# try:
-review_with_LH = driver.find_element_by_css_selector(".lh-select.collapsable.font-regular.bottom-separator")
-review_with_LH.find_element_by_xpath(u"//span[contains(text(), '(Recommended)')]").click()
-review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
-# except NoSuchElementException:
-  # pass
+try:
+    review_with_LH = driver.find_element_by_css_selector(".lh-select.collapsable.font-regular.bottom-separator")
+    review_with_LH.find_element_by_xpath(u"//span[contains(text(), '(Recommended)')]").click()
+    review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
+except NoSuchElementException:
+  pass
 insert_review_full_name = driver.find_element_by_id("review-full-name").send_keys("omri golan")
 insert_review_mobile_number = driver.find_element_by_id("mobile-number").send_keys("7547541452")
 insert_review_email = driver.find_element_by_id("review-email").send_keys("bob.g@goroomer.com")
@@ -88,8 +87,6 @@ insert_billing_address_click_box = driver.find_element_by_id('billing-address-in
 insert_billing_address_arrow_down = driver.find_element_by_id('billing-address-input').send_keys(Keys.ARROW_DOWN)
 insert_billing_address_click_enter = driver.find_element_by_id('billing-address-input').send_keys(Keys.ENTER)
 click_book_button_review = driver.find_element_by_id('checkout-button').click()
-time.sleep(10)
-print get_transaction_ID(driver.current_url, regex_transaction_id)
 
 '''
 Check that your on thank you page
@@ -100,25 +97,5 @@ try:
 except NoSuchElementException:
     driver.save_screenshot('error_buying_room.png')
     print "Could not Purchase room please look at script diractory for a screenshot of failer"
+print get_transaction_ID(driver.current_url, regex_transaction_id)
 driver.close()
-
-'''
-Old review
-'''
-# insert_first_name_review = driver.find_element_by_id('review-first-name').send_keys('om')
-# insert_last_name_review = driver.find_element_by_id('review-last-name').send_keys('ri')
-# insert_email_review = driver.find_element_by_id('review-email').send_keys('omri@golan.com')
-# insert_phone_number_review = driver.find_element_by_id('mobile-number').send_keys('7027031452')
-# insert_credit_number_review = driver.find_element_by_id('review-credit-card-number').send_keys('4242424242424242')
-# insert_credit_expire_date_review = driver.find_element_by_id('review-cc-exp-month').send_keys(Keys.PAGE_DOWN)
-# insert_credit_expire_year_review = driver.find_element_by_id('review-cc-exp-year').send_keys(Keys.PAGE_DOWN)
-# insert_credit_4last_num_review = driver.find_element_by_id('review-cc-security-code').send_keys('8789')
-# insert_stat_review = driver.find_element_by_id('review-state').send_keys('adf')
-# insert_city_review = driver.find_element_by_id('review-city').send_keys('daf')
-# insert_street_review = driver.find_element_by_id('review-street').send_keys('dfefq')
-# insert_stat_zipcode = driver.find_element_by_id('review-zip').send_keys('101')
-# time.sleep(5)
-
-# click_book_button_review = driver.find_element_by_id('checkout-button').click()
-
-# driver.quit()
