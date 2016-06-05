@@ -1,4 +1,5 @@
 Todo
-	Hendle non LH entry page
 	Create error handleing object
-	Try to get filer logs from server
+	Try to get failer logs from server
+	Rewrite code to be batter
+		cleaner and easyer to understand
