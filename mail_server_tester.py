@@ -30,7 +30,7 @@ driver = webdriver.Firefox()
 driver.implicitly_wait(30)
 
 
-redirect_to_page = driver.get('http://roomer-qa.herokuapp.com/rooms/Orlando--FL--USA/dates/2016-06-15,2016-06-18?adults=2&children=0&child_guests_ages=&reservation_id=32477_2016-06-15_2016-06-18_H_APT-U10-1B-SC-U10__2_0_&utm_campaign=Orlando--FL--USA&utm_source=Skyscanner&utm_medium=API&rate_plan_id=2&rate_plan_token=10209a33315e0d71f1f305b826c7d63b&currency=USD')
+redirect_to_page = driver.get('http://roomer-qa.herokuapp.com/rooms/Orlando--FL--USA/dates/2016-06-07,2016-06-10?adults=2&children=0&child_guests_ages=&reservation_id=4040_2016-06-07_2016-06-10_H_DBL-U10-2Q-BB-U10__2_0_&utm_campaign=Orlando--FL--USA&utm_source=KAYAK&utm_medium=API&rate_plan_id=1&rate_plan_token=132ef33e2c886e4a4467dff5fece90b3&currency=USD&orig_price=49')
 sleep(3)
 try:
     list_page = driver.find_element_by_css_selector('.list-right')
