@@ -36,8 +36,8 @@ By waiting for the list to load before it takes any action
 '''
 Secret_deal = raw_input("Would you like to open secret deal? Y/N: ")
 if Secret_deal.upper() == 'Y':
-    while True:
-        try:
+    while True:w
+        try:w
             insert_email_for_secret_deals = driver.find_element_by_name('user[email]').send_keys('afd@afd.com')
             click_unlock_secret_deals = driver.find_element_by_name('button').click()
             break
