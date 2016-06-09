@@ -27,10 +27,10 @@ def get_transaction_ID(url, regex):
 
 
 driver = webdriver.Firefox()
-driver.implicitly_wait(30)
+driver.implicitly_wait(15)
 
 
-redirect_to_page = driver.get('http://roomer-qa.herokuapp.com/rooms/Orlando--FL--USA/dates/2016-06-07,2016-06-10?adults=2&children=0&child_guests_ages=&reservation_id=4040_2016-06-07_2016-06-10_H_DBL-U10-2Q-BB-U10__2_0_&utm_campaign=Orlando--FL--USA&utm_source=KAYAK&utm_medium=API&rate_plan_id=1&rate_plan_token=132ef33e2c886e4a4467dff5fece90b3&currency=USD&orig_price=49')
+redirect_to_page = driver.get('http://roomer-qa-2.herokuapp.com/rooms/Orlando--FL--USA/dates/2016-06-27,2016-07-02?adults=2&children=0&child_guests_ages=&reservation_id=32477_2016-06-27_2016-07-02_H_APT-U10-B1-SC-U10__2_0_&utm_campaign=Orlando--FL--USA&utm_source=KAYAK&utm_medium=API&rate_plan_id=2&rate_plan_token=8105c3e7462275e0b4f749c4044d8e19&currency=USD&orig_price=155')
 sleep(3)
 try:
     list_page = driver.find_element_by_css_selector('.list-right')
@@ -39,7 +39,10 @@ try:
     move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
     driver.get(driver.current_url)
 except NoSuchElementException:
-    pass
+    list_page = driver.find_element_by_css_selector('.list-right')
+    first_room = list_page.find_element_by_css_selector('.component-item.component-list-item.secret_deal_unlocked.secret_deal_has.isDatesVisible')
+    open_first_room_list = high_lighted_room_list.find_element_by_css_selector("button.component-post.button").click()
+    move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
 try:
     entry_with_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")
     select_non_refund_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
@@ -49,7 +52,7 @@ except NoSuchElementException:
         entry_without_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.no_refund")
         entry_without_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
     except NoSuchElementException:
-        entry_free_cancellation = driver.find_element_by_css_selector('.entry-white-box.entry-book-option.free_cancellation.referral_n_r')
+        entry_free_cancellation = driver.find_element_by_css_selector('.entry-white-box.entry-book-option.free_cancellation')
         pass            
 click_book_entry = driver.find_element_by_css_selector('.book_now_btn_redirect').click()
 driver.get(driver.current_url)

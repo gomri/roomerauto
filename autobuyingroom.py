@@ -26,29 +26,37 @@ def get_transaction_ID(url, regex):
 
 
 driver = webdriver.Firefox()
-driver.implicitly_wait(20)
+driver.implicitly_wait(15)
 
 enter_home_page = driver.get('http://roomer-qa-1.herokuapp.com')
 click_Find_Rooms = driver.find_element_by_css_selector('div.find_rooms.blue-btn').click()
-'''
-Solves the problem of the code crashing if the list hes not loaded yet
-By waiting for the list to load before it takes any action
-'''
-Secret_deal = raw_input("Would you like to open secret deal? Y/N: ")
-if Secret_deal.upper() == 'Y':
-    while True:w
-        try:w
-            insert_email_for_secret_deals = driver.find_element_by_name('user[email]').send_keys('afd@afd.com')
-            click_unlock_secret_deals = driver.find_element_by_name('button').click()
-            break
-        except ElementNotVisibleException:
-            pass
-else:
-    pass
+list_page = driver.find_element_by_css_selector('.list-right')
+if list_page.find_element_by_css_selector('.l-secret-deal-banner.float-r'):
+    open_secret_deal = raw_input('Would you like to open secret deal Y/N: ')
+    if open_secret_deal.upper() == 'Y':
+       secret_deal_box = list_page.find_element_by_css_selector('.l-secret-deal-banner.float-r')
+       secret_deal_box.find_element_by_name('user[email]').send_keys('invalid@email.com')
+       secret_deal_box.find_element_by_css_selector('.login_button').click()
 
-list_page = driver.find_element_by_css_selector('.l-list-items.float-r.list-items')
-first_room_list = list_page.find_elements_by_css_selector(".component-card-inner.component-inner")[0]
-open_first_room_list = first_room_list.find_element_by_css_selector("button.component-post.button").click()
+list_after_refresh = driver.find_elements_by_css_selector('.l-list-items.float-r.list-items')
+first_room_on_list = list_after_refresh.find_element_by_css_selector('.component-card-inner.component-inner')
+first_room_on_list.find_element_by_css_selector('.component-post.button').click()
+move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
+driver.get(driver.current_url)
+try:
+    entry_with_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.entry-white-box-life-happens.clearfix")
+    select_non_refund_LH = entry_with_LH.find_element_by_css_selector(".entry-white-box.entry_box_no_refund").click()
+    entry_with_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
+except NoSuchElementException:
+    try:
+        entry_without_LH = driver.find_element_by_css_selector(".entry-white-box.entry-book-option.no_refund")
+        entry_without_LH.find_element_by_xpath(u"//div[contains(text(), 'Book Now')]").click()
+    except NoSuchElementException:
+        entry_free_cancellation = driver.find_element_by_css_selector('.entry-white-box.entry-book-option.free_cancellation')
+        pass            
+click_book_entry = driver.find_element_by_css_selector('.book_now_btn_redirect').click()
+driver.get(driver.current_url)
+print get_reservation_ID(driver.current_url, regex_reservation_id)
 
 move_to_review_page = driver.switch_to.window(driver.window_handles[-1])
 driver.get(driver.current_url)
@@ -68,12 +76,17 @@ New review
 Tries to choose life happens on review if it cant
 Moves to filling the rest of the fields
 '''
-# try:
-review_with_LH = driver.find_element_by_css_selector(".lh-select.collapsable.font-regular.bottom-separator")
-review_with_LH.find_element_by_xpath(u"//span[contains(text(), '(Recommended)')]").click()
-review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
-# except NoSuchElementException:
-  # pass
+try:   
+    review_with_LH = driver.find_element_by_css_selector(".lh-select.collapsable.font-regular.bottom-separator")
+    if review_with_LH:
+        life_happen_review = raw_input('Y/N life happens: ')
+        if life_happen_review.upper() == 'Y':
+            review_with_LH.find_element_by_xpath(u"//span[contains(text(), '(Recommended)')]").click()
+            review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
+        else:
+            review_with_LH.find_element_by_css_selector('.continue-button.standard-button.smaller.font-regular.weight-medium.push-bottom').click()
+except NoSuchElementException:
+  pass
 insert_review_full_name = driver.find_element_by_id("review-full-name").send_keys("omri golan")
 insert_review_mobile_number = driver.find_element_by_id("mobile-number").send_keys("7547541452")
 insert_review_email = driver.find_element_by_id("review-email").send_keys("bob.g@goroomer.com")
